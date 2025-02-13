@@ -8,6 +8,10 @@
     box-sizing: border-box;
 }
 
+.hljs-ln td {
+    padding-right: 1.5em;
+}  
+
 body {
     font-family: 'JetBrains Mono', Arial, Sans-serif;
     user-select: text;
@@ -112,4 +116,9 @@ body {
     border-bottom: 1px groove gray;
 
     overflow: auto;
+    word-wrap: break-word;
 }
+
+.code pre {
+    white-space: pre-wrap;
+} 

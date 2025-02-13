@@ -3,16 +3,16 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-        <link rel="stylesheet" href="style.css">
-
+        
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
-
+        
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.9.0/highlightjs-line-numbers.min.js"></script>
+        
+        <link rel="stylesheet" href="style.css">
 
         <title>Algorithm Visualizer</title>
     </head>
@@ -55,10 +55,18 @@
             </div>
 
             <div class="code resizable-left">
-                
+                <pre><code class="language-cpp initial-code">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    cout &lt;&lt; "Choose a algorithm on the sidebar and it's code will be displayed here." &lt;&lt; endl;
+    return 0;
+}
+                </code></pre>
             </div>
         </div>
 
         <script src="script.js"></script>
+        <script>hljs.initHighlightingOnLoad();hljs.initLineNumbersOnLoad();</script>
     </body>
 </html>
