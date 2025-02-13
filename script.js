@@ -5,12 +5,12 @@ const visualizer = document.querySelector(".visualizer");
 const console_log = document.querySelector(".console-log");
 const code = document.querySelector(".code");
 
-document.querySelectorAll(".resizable-right").forEach(el => { el.addEventListener('mousedown', mousedown_hor); });
-document.querySelectorAll(".resizable-left").forEach(el => { el.addEventListener('mousedown', mousedown_hor); });
-document.querySelectorAll(".resizable-up").forEach(el => { el.addEventListener('mousedown', mousedown_ver); });
-document.querySelectorAll(".resizable-down").forEach(el => { el.addEventListener('mousedown', mousedown_ver); });
+document.querySelectorAll(".resizable-right").forEach(el => { el.addEventListener('mousedown', mousedownHor); });
+document.querySelectorAll(".resizable-left").forEach(el => { el.addEventListener('mousedown', mousedownHor); });
+document.querySelectorAll(".resizable-up").forEach(el => { el.addEventListener('mousedown', mousedownVer); });
+document.querySelectorAll(".resizable-down").forEach(el => { el.addEventListener('mousedown', mousedownVer); });
 
-function mousedown_hor(e) {
+function mousedownHor(e) {
     let el = e.target;
     if(el.closest('.content') != null) el = el.closest('.content');
     if(el.closest('.sidebar') != null) el = el.closest('.sidebar');
@@ -59,7 +59,7 @@ function mousedown_hor(e) {
     }
 }
 
-function mousedown_ver(e) {
+function mousedownVer(e) {
     let el = e.target;
     if(el.closest('.visualizer') != null) el = el.closest('.visualizer');
     if(el.closest('.console-log') != null) el = el.closest('.console-log');
@@ -98,4 +98,19 @@ function mousedown_ver(e) {
             window.removeEventListener('mouseup', mouseup);
         }
     }
+}
+
+document.querySelectorAll(".alg-name").forEach(el => { el.addEventListener('click', loadCode) });
+
+function loadCode(e) {
+    let el = e.target;
+    let path = './algorithms/' + el.innerHTML + '.html';
+
+    fetch(path)
+    .then(res => res.text())
+    .then(data => { 
+        code.innerHTML = data; 
+        hljs.highlightAll(); 
+        hljs.initLineNumbersOnLoad();
+    });
 }

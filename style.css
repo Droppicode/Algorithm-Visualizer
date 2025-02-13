@@ -1,6 +1,6 @@
 :root {
-    --light-gray: rgb(56, 56, 56);
-    --dark-gray: rgb(38, 38, 38);
+    --light-gray: #3a3f4b;
+    --dark-gray: #282c34;
 }
 
 * {
@@ -11,6 +11,7 @@
 body {
     font-family: 'JetBrains Mono', Arial, Sans-serif;
     user-select: text;
+    color: rgb(210, 210, 210);
 }
 
 .navbar {
@@ -70,6 +71,10 @@ body {
     border-left: 1px groove gray;
     border-bottom: 1px groove gray;
 }
+.sidebar .alg-name {
+    font-size: 15px;
+    margin: 6px;
+}
 
 .content {
     width: 60vw;
@@ -105,4 +110,6 @@ body {
     border-top: 1px groove gray;
     border-right: 1px groove gray;
     border-bottom: 1px groove gray;
+
+    overflow: auto;
 }
