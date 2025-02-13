@@ -1,6 +1,7 @@
 :root {
     --light-gray: #3a3f4b;
     --dark-gray: #282c34;
+    --text: rgb(210, 210, 210)
 }
 
 * {
@@ -15,7 +16,7 @@
 body {
     font-family: 'JetBrains Mono', Arial, Sans-serif;
     user-select: text;
-    color: rgb(210, 210, 210);
+    color: var(--text);
 }
 
 .navbar {
@@ -37,11 +38,13 @@ body {
 }
 
 .navbar .sidebar-btn {
+    height: 4vh;
     width: 5vw;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
-.navbar .current {
+.navbar .home-btn {
     width: 60vw;
 }
 .navbar .controls {
@@ -54,6 +57,20 @@ body {
     width: 5vw;
     display: flex;
     justify-content: center;
+}
+
+.navbar .nav-btn {
+    height: min(1.5vw, 2.5vh);
+    width: 1.5vw;
+    border: 2px solid var(--text);
+    text-decoration: none;
+    border-radius: 3px;
+    background-color: var(--light-gray);
+    cursor: pointer;
+}
+
+.navbar .nav-btn.closed {
+    background-color: var(--text);
 }
 
 .app {
