@@ -105,8 +105,11 @@ function mousedownVer(e) {
     }
 }
 
+
+const states = [];
 document.querySelectorAll(".alg-name").forEach(el => { 
     el.addEventListener('click', () => {
+        parseStates(el.innerHTML);
         fetch('./algorithms/' + el.innerHTML + '.html')
         .then(res => res.text())
         .then(data => { 
@@ -117,6 +120,23 @@ document.querySelectorAll(".alg-name").forEach(el => {
     });
 });
 
+function parseStates(alg_name) {
+    fetch('./algorithms/states/' + alg_name + '_states.json')
+    .then(res => res.json())
+    .then(data => {
+        console.log("fetched")
+        states.length = 0;
+        data.forEach(state => {
+            states.push(state);
+            const div = document.createElement('div');
+            div.classList.add('console-line');
+            div.innerHTML = state.log;
+            console_log.appendChild(div);
+            console.log(state);
+        });
+    });
+}
+
 document.querySelector(".home-btn").addEventListener('click', () => { 
     code.innerHTML = home_code; 
     hljs.highlightAll(); 
@@ -125,11 +145,11 @@ document.querySelector(".home-btn").addEventListener('click', () => {
 
 document.querySelectorAll(".nav-btn").forEach(el => { 
     el.addEventListener('click', () => {
-        el.classList.toggle('closed');
+        el.classList.toggle('open');
 
         if(el.closest('.sidebar-btn') != null) {
             console.log("sidebar");
-            if(el.classList.contains('closed')) {
+            if(!el.classList.contains('open')) {
                 console.log("fechando");
                 sidebar.style.width = 0;
                 content.style.width = (content_width + sidebar_width) + "vw";
@@ -144,7 +164,7 @@ document.querySelectorAll(".nav-btn").forEach(el => {
 
         if(el.closest('.code-btn') != null) {
             console.log("code");
-            if(el.classList.contains('closed')) {
+            if(!el.classList.contains('open')) {
                 console.log("fechando");
                 code.style.width = 0;
                 content.style.width = (content_width + code_width) + "vw";

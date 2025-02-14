@@ -1,0 +1,7 @@
+[
+    {"current":0,"log":"BFS started from node 0\nCurrent node: 0","queue":[0],"visited":[true,false,false,false,false]},
+    {"current":1,"log":"Current node: 1","queue":[1,2],"visited":[true,true,true,false,false]},
+    {"current":2,"log":"Current node: 2","queue":[2,3,4],"visited":[true,true,true,true,true]},
+    {"current":3,"log":"Current node: 3","queue":[3,4],"visited":[true,true,true,true,true]},
+    {"current":4,"log":"Current node: 4","queue":[4],"visited":[true,true,true,true,true]}
+]
