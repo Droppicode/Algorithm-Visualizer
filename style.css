@@ -48,10 +48,12 @@ body {
     width: 60vw;
 }
 .navbar .controls {
+    height: 4vh;
     width: 30vw;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+    align-items: center;
 }
 .navbar .code-btn {
     width: 5vw;
@@ -70,6 +72,33 @@ body {
 }
 
 .navbar .nav-btn.open {
+    background-color: var(--text);
+}
+.controls .step-range {
+    width: auto;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.controls .steps {
+    width: 15vw;
+    height: 65%;
+    border: 2px solid var(--text);
+    border-radius: 3px;
+    background-color: var(--light-gray);
+    display: flex;
+    justify-content: space-between;
+}
+.controls .progress {
+    position: absolute;
+    font-size: 10px;
+    color: var(--dark-gray);
+}
+.controls .step {
+    flex: 1;
+}
+.controls .step.active {
     background-color: var(--text);
 }
 
@@ -121,6 +150,13 @@ body {
     background-color: var(--dark-gray);
 
     border: 1px groove gray;
+    overflow: auto;
+    word-wrap: break-word;
+}
+
+.console-log .console-line {
+    margin: 6px;
+    margin-left: 14px;
 }
 
 .code {

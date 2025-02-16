@@ -1,8 +1,8 @@
 const body = document.querySelector("body");
 const sidebar = document.querySelector(".sidebar");
 const content = document.querySelector(".content");
-const visualizer = document.querySelector(".visualizer");
-const console_log = document.querySelector(".console-log");
+const visualizer = document.querySelector(".content .visualizer");
+const console_log = document.querySelector(".content .console-log");
 const code = document.querySelector(".code");
 const home_code = code.innerHTML;
 
@@ -124,17 +124,51 @@ function parseStates(alg_name) {
     fetch('./algorithms/states/' + alg_name + '_states.json')
     .then(res => res.json())
     .then(data => {
-        console.log("fetched")
         states.length = 0;
-        data.forEach(state => {
+        console_log.innerHTML = "";
+
+        for(var i = 0; i<data.length; i++) {
+            let state = data[i];
             states.push(state);
-            const div = document.createElement('div');
+
+            let div = document.createElement('div');
             div.classList.add('console-line');
+            div.classList.add('_' + (i+1));
             div.innerHTML = state.log;
+            div.style.display = "none";
+
             console_log.appendChild(div);
-            console.log(state);
-        });
+        }
+
+        updateStepRange();
     });
+}
+
+function updateStepRange() {
+    const steps = document.querySelector(".controls .steps");
+    steps.innerHTML = "";
+
+    for(var i = 1; i<=states.length; i++) {
+        let div = document.createElement('div');
+        div.classList.add('step');
+        div.classList.add('_' + i);
+        steps.appendChild(div);
+    }
+
+    document.querySelector(".controls .progress").innerHTML = "0/" + states.length;
+    if(states.length) changeStep(1);
+}
+
+function changeStep(x) {
+    document.querySelector(".controls .progress").innerHTML = `${x}/${states.length}`;
+
+    document.querySelectorAll('.controls .steps .step').forEach(el => { el.classList.remove('active') });
+    console_log.querySelectorAll('.console-line').forEach(el => { el.display = "none" });
+
+    for(var i = 1; i<=x; i++) {
+        document.querySelector(`.controls .steps .step._${i}`).classList.add('active');
+        console_log.querySelector(`.console-line._${i}`).style.display = "block";
+    }
 }
 
 document.querySelector(".home-btn").addEventListener('click', () => { 
@@ -188,5 +222,5 @@ function pixel_to_vw(px) {
 }
 
 function pixel_to_vh(px) {
-    return 100*px/window.innerWidth;
+    return 100*px/window.innerHeight;
 }

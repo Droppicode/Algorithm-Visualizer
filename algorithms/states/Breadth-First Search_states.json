@@ -1,7 +1,13 @@
 [
-    {"current":0,"log":"BFS started from node 0\nCurrent node: 0","queue":[0],"visited":[true,false,false,false,false]},
-    {"current":1,"log":"Current node: 1","queue":[1,2],"visited":[true,true,true,false,false]},
-    {"current":2,"log":"Current node: 2","queue":[2,3,4],"visited":[true,true,true,true,true]},
-    {"current":3,"log":"Current node: 3","queue":[3,4],"visited":[true,true,true,true,true]},
-    {"current":4,"log":"Current node: 4","queue":[4],"visited":[true,true,true,true,true]}
+{"current":0,"log":"Starting BFS from: 0","queue":[0],"visited":[2,0,0,0,0]},
+{"current":0,"log":"Adding neighbors 1, 2","queue":[1,2],"visited":[2,1,1,0,0]},
+{"current":1,"log":"Current node: 1","queue":[2],"visited":[2,2,1,0,0]},
+{"current":1,"log":"Adding neighbors 3, 4","queue":[2,3,4],"visited":[2,2,1,1,1]},
+{"current":2,"log":"Current node: 2","queue":[3,4],"visited":[2,2,2,1,1]},
+{"current":2,"log":"No new neighbors to add","queue":[3,4],"visited":[2,2,2,1,1]},
+{"current":3,"log":"Current node: 3","queue":[4],"visited":[2,2,2,2,1]},
+{"current":3,"log":"No new neighbors to add","queue":[4],"visited":[2,2,2,2,1]},
+{"current":4,"log":"Current node: 4","queue":[],"visited":[2,2,2,2,2]},
+{"current":4,"log":"No new neighbors to add","queue":[],"visited":[2,2,2,2,2]},
+{"current":-1,"log":"BFS completed","queue":null,"visited":[2,2,2,2,2]}
 ]
