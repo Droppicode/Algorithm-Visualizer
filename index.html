@@ -36,7 +36,18 @@
                     <div class="step-next">.</div>
                     <div class="progress">1/1</div>
                 </div>
-                <div class="speed"><p>Speed</p></div>
+                <div class="speed-container">
+                    <select class="speed">
+                        <option value="0.25">0.25</option>
+                        <option value="0.5">0.5</option>
+                        <option value="0.75">0.75</option>
+                        <option value="1" selected>1</option>
+                        <option value="1.25">1.25</option>
+                        <option value="1.5">1.5</option>
+                        <option value="1.75">1.75</option>
+                        <option value="2">2</option>
+                    </select>
+                </div>
             </div>
             <div class="code-btn">
                 <button class="nav-btn open"></button>
@@ -53,7 +64,7 @@
 
             <div class="content resizable-left resizable-right">
                 <div class="visualizer resizable-down">
-                    <div class="name-bar">Tracer</div>
+                    <div class="name-bar">Visualizer</div>
                     <!-- Load with Js upon selecting algorithm on sidebar -->
                 </div>
                 <div class="console-log resizable-up">

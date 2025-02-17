@@ -4,7 +4,8 @@ const content = document.querySelector(".content");
 const visualizer = document.querySelector(".content .visualizer");
 const console_log = document.querySelector(".content .console-log");
 const code = document.querySelector(".code");
-const home_code = code.innerHTML;
+const controls = document.querySelector('.controls');
+const home_code = code.innerHTML, home_console = console_log.innerHTML, home_visualizer = visualizer.innerHTML, home_controls = controls.innerHTML;
 
 let sidebar_width = 10, content_width = 60, code_width = 30;
 
@@ -106,7 +107,7 @@ function mousedownVer(e) {
 }
 
 
-const states = [];
+let states = [];
 document.querySelectorAll(".alg-name").forEach(el => { 
     el.addEventListener('click', () => {
         parseStates(el.innerHTML);
@@ -145,7 +146,7 @@ function parseStates(alg_name) {
 }
 
 function updateStepRange() {
-    const steps = document.querySelector(".controls .steps");
+    const steps = controls.querySelector('.steps');
     steps.innerHTML = "";
 
     for(var i = 1; i<=states.length; i++) {
@@ -155,24 +156,69 @@ function updateStepRange() {
         steps.appendChild(div);
     }
 
-    document.querySelector(".controls .progress").innerHTML = "0/" + states.length;
+    controls.querySelector('.progress').innerHTML = "0/" + states.length;
     if(states.length) changeStep(1);
+
+    document.querySelectorAll('.step').forEach(el => { 
+        el.addEventListener('click', () => {
+            changeStep(el.classList.item(1).substring(1));
+        });
+    }); 
 }
 
 function changeStep(x) {
-    document.querySelector(".controls .progress").innerHTML = `${x}/${states.length}`;
+    controls.querySelector('.progress').innerHTML = `${x}/${states.length}`;
 
-    document.querySelectorAll('.controls .steps .step').forEach(el => { el.classList.remove('active') });
-    console_log.querySelectorAll('.console-line').forEach(el => { el.display = "none" });
+    controls.querySelectorAll('.steps .step').forEach(el => { el.classList.remove('active') });
+    console_log.querySelectorAll('.console-line').forEach(el => { el.style.display = "none" });
 
     for(var i = 1; i<=x; i++) {
-        document.querySelector(`.controls .steps .step._${i}`).classList.add('active');
+        controls.querySelector(`.steps .step._${i}`).classList.add('active');
         console_log.querySelector(`.console-line._${i}`).style.display = "block";
     }
 }
 
+function resetEventListeners() {
+    let playInterval = undefined;
+    controls.querySelector('.play').addEventListener('click', () => {
+        if(playInterval == undefined) {
+            playInterval = setInterval(() => {
+                let active = Number(controls.querySelector('.progress').innerHTML.split('/')[0]);
+                if(active < states.length) changeStep(active + 1);
+                else {
+                    clearInterval(playInterval);
+                    playInterval = undefined;
+                }
+            }, 1000 / controls.querySelector('.speed').value);
+        }
+        else {
+            clearInterval(playInterval);
+            playInterval = undefined;
+        }
+    });
+
+    controls.querySelector('.step-prev').addEventListener('click', () => {
+        let active = Number(controls.querySelector('.progress').innerHTML.split('/')[0]);
+        if(active > 1) changeStep(active - 1);
+    });
+
+    controls.querySelector('.step-next').addEventListener('click', () => {
+        let active = Number(controls.querySelector('.progress').innerHTML.split('/')[0]);
+        if(active < states.length) changeStep(active + 1);
+    });
+}
+resetEventListeners();
+
 document.querySelector(".home-btn").addEventListener('click', () => { 
     code.innerHTML = home_code; 
+    console_log.innerHTML = home_console;
+    visualizer.innerHTML = home_visualizer;
+
+    states = [];
+    controls.innerHTML = home_controls;
+
+    resetEventListeners();
+
     hljs.highlightAll(); 
     hljs.initLineNumbersOnLoad(); 
 });
