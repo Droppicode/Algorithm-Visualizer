@@ -179,21 +179,28 @@ function changeStep(x) {
 }
 
 function resetEventListeners() {
-    let playInterval = undefined;
-    controls.querySelector('.play').addEventListener('click', () => {
-        if(playInterval == undefined) {
-            playInterval = setInterval(() => {
-                let active = Number(controls.querySelector('.progress').innerHTML.split('/')[0]);
-                if(active < states.length) changeStep(active + 1);
-                else {
-                    clearInterval(playInterval);
-                    playInterval = undefined;
-                }
-            }, 1000 / controls.querySelector('.speed').value);
+    let playing = false;
+    function playInterval(el, active) {
+        if(playing && active < states.length) {
+            changeStep(active + 1);
+            setTimeout(playInterval, 1000 / controls.querySelector('.speed').value, el, active+1);
         }
         else {
-            clearInterval(playInterval);
-            playInterval = undefined;
+            playing = false;
+            el.style.fill = "var(--light-gray)";
+        }
+    }
+    
+    controls.querySelector('.play-btn').addEventListener('click', (e) => {
+        const el = e.target;
+        if(!playing) {
+            playing = true;
+            el.style.fill = "var(--text)";
+            playInterval(el, Number(controls.querySelector('.progress').innerHTML.split('/')[0]));
+        }
+        else {
+            playing = false;
+            el.style.fill = "var(--light-gray)";
         }
     });
 

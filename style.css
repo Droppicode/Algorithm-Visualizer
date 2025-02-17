@@ -1,7 +1,7 @@
 :root {
     --light-gray: #3a3f4b;
     --dark-gray: #282c34;
-    --text: rgb(210, 210, 210)
+    --text: #d2d2d2
 }
 
 * {
@@ -44,12 +44,16 @@ body {
     justify-content: center;
     align-items: center;
 }
+.navbar .home-container {
+    width: 55vw;
+}
 .navbar .home-btn {
-    width: 60vw;
+    cursor: pointer;
 }
 .navbar .controls {
     height: 4vh;
-    width: 30vw;
+    width: 33vw;
+    margin-right: 2vw;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -70,10 +74,22 @@ body {
     background-color: var(--light-gray);
     cursor: pointer;
 }
-
 .navbar .nav-btn.open {
     background-color: var(--text);
 }
+
+.controls .play-container {
+    width: 2.5vw;
+    fill: var(--light-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.controls .play-btn {
+    height: 4vh;
+    cursor: pointer;
+}
+
 .controls .step-range {
     width: auto;
     height: 100%;
@@ -92,13 +108,36 @@ body {
 }
 .controls .progress {
     position: absolute;
-    font-size: 10px;
+    font-size: 13px;
+    font-weight: 600;
     color: var(--dark-gray);
+    pointer-events: none;
+    user-select: none;
 }
 .controls .step {
     flex: 1;
+    cursor: pointer;
 }
 .controls .step.active {
+    background-color: var(--text);
+}
+.controls .step-prev, .controls .step-next {
+    width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.controls .prev-btn, .controls .next-btn {
+    width: 2vw;
+    fill: var(--text);
+    cursor: pointer;
+}
+.controls .speed-container {
+    display: flex;
+    align-items: center;
+}
+.controls .speed {
+    color: var(--dark-gray);
     background-color: var(--text);
 }
 
@@ -124,6 +163,7 @@ body {
 .sidebar .alg-name {
     font-size: 15px;
     margin: 6px;
+    cursor: pointer;
 }
 
 .content {
