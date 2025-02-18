@@ -9,6 +9,10 @@ const home_code = code.innerHTML, home_console = console_log.innerHTML, home_vis
 
 let sidebar_width = 10, content_width = 60, code_width = 30;
 
+
+/* ====================== RESIZABLE ====================== */
+
+
 document.querySelectorAll(".resizable-right").forEach(el => { el.addEventListener('mousedown', mousedownHor); });
 document.querySelectorAll(".resizable-left").forEach(el => { el.addEventListener('mousedown', mousedownHor); });
 document.querySelectorAll(".resizable-up").forEach(el => { el.addEventListener('mousedown', mousedownVer); });
@@ -107,7 +111,11 @@ function mousedownVer(e) {
 }
 
 
+/* ====================== SELECT ALGORITHM ====================== */
+
+
 let states = [];
+
 document.querySelectorAll(".alg-name").forEach(el => { 
     el.addEventListener('click', () => {
         parseStates(el.innerHTML);
@@ -166,6 +174,10 @@ function updateStepRange() {
     }); 
 }
 
+
+/* ====================== ALGORITHM CONTROLS ====================== */
+
+
 function changeStep(x) {
     controls.querySelector('.progress').innerHTML = `${x}/${states.length}`;
 
@@ -214,7 +226,12 @@ function resetEventListeners() {
         if(active < states.length) changeStep(active + 1);
     });
 }
+
 resetEventListeners();
+
+
+/* ====================== NAVBAR BUTTONS ====================== */
+
 
 document.querySelector(".home-btn").addEventListener('click', () => { 
     code.innerHTML = home_code; 
@@ -265,6 +282,27 @@ document.querySelectorAll(".nav-btn").forEach(el => {
         }
     }); 
 });
+
+
+/* ====================== VISUALIZER ====================== */
+
+
+document.addEventListener('wheel', myFunction);
+
+function myFunction(e) {
+    let el = e.target;
+    if(el.closest('.visual-container') != null) el = el.closest('.visual-container');
+
+    if(el.classList.contains('visual-container')) {
+        let viewBox = el.getAttribute('viewBox').split(' ');
+
+        let multi = 1.5;
+        if(e.deltaY > 0) for(var i = 0; i<4; i++) { viewBox[i] = viewBox[i] * multi };
+        if(e.deltaY < 0) for(var i = 0; i<4; i++) { viewBox[i] = viewBox[i] / multi };
+
+        el.setAttribute('viewBox', `${viewBox[0]} ${viewBox[1]} ${viewBox[2]} ${viewBox[3]}`)
+    }
+}
 
 
 /* ====================== GENERAL FUNCTIONS ====================== */
