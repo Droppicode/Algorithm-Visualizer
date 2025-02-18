@@ -190,21 +190,24 @@ function changeStep(x) {
     }
 }
 
-function resetEventListeners() {
-    let playing = false;
-    function playInterval(el, active) {
-        if(playing && active < states.length) {
-            changeStep(active + 1);
-            setTimeout(playInterval, 1000 / controls.querySelector('.speed').value, el, active+1);
-        }
-        else {
-            playing = false;
-            el.style.fill = "var(--light-gray)";
-        }
+let playing = false;
+
+function playInterval(el, active) {
+    if(playing && active < states.length) {
+        changeStep(active + 1);
+        setTimeout(playInterval, 1000 / controls.querySelector('.speed').value, el, active+1);
     }
-    
-    controls.querySelector('.play-btn').addEventListener('click', (e) => {
-        const el = e.target;
+    else {
+        playing = false;
+        el.style.fill = "var(--light-gray)";
+    }
+}
+
+controls.addEventListener('click', (e) => {
+    let el = e.target;
+
+    if(el.closest('.play-btn') != null) {
+        el = el.closest('.play-btn');
         if(!playing) {
             playing = true;
             el.style.fill = "var(--text)";
@@ -214,20 +217,20 @@ function resetEventListeners() {
             playing = false;
             el.style.fill = "var(--light-gray)";
         }
-    });
+    }
 
-    controls.querySelector('.step-prev').addEventListener('click', () => {
+    if(el.closest('.step-prev') != null) {
+        el = el.closest('.step-prev');
         let active = Number(controls.querySelector('.progress').innerHTML.split('/')[0]);
         if(active > 1) changeStep(active - 1);
-    });
+    }
 
-    controls.querySelector('.step-next').addEventListener('click', () => {
+    if(el.closest('.step-next') != null) {
+        el = el.closest('.step-next');
         let active = Number(controls.querySelector('.progress').innerHTML.split('/')[0]);
         if(active < states.length) changeStep(active + 1);
-    });
-}
-
-resetEventListeners();
+    }
+})
 
 
 /* ====================== NAVBAR BUTTONS ====================== */
@@ -239,9 +242,8 @@ document.querySelector(".home-btn").addEventListener('click', () => {
     visualizer.innerHTML = home_visualizer;
 
     states = [];
+    playing = false;
     controls.innerHTML = home_controls;
-
-    resetEventListeners();
 
     hljs.highlightAll(); 
     hljs.initLineNumbersOnLoad(); 
@@ -317,10 +319,11 @@ document.addEventListener('wheel', (e) => {
     }
 });
 
-visualizer.querySelector('.visual-container').addEventListener('mousedown', (e) => {
+visualizer.addEventListener('mousedown', (e) => {
     let el = e.target;
     if(el.closest('.node') != null) el = el.closest('.node');
 
+    body.style.userSelect = "none";
     if(el.classList.contains('node')) {
         window.addEventListener('mousemove', mousemove);
         window.addEventListener('mouseup', mouseup);
@@ -360,6 +363,7 @@ visualizer.querySelector('.visual-container').addEventListener('mousedown', (e) 
     }
 
     function mouseup() {
+        body.style.userSelect = "text";
         window.removeEventListener('mousemove', mousemove);
         window.removeEventListener('mouseup', mouseup);
     }
