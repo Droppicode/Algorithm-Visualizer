@@ -287,22 +287,83 @@ document.querySelectorAll(".nav-btn").forEach(el => {
 /* ====================== VISUALIZER ====================== */
 
 
-document.addEventListener('wheel', myFunction);
+let zoom = 1;
 
-function myFunction(e) {
+document.addEventListener('wheel', (e) => {
     let el = e.target;
     if(el.closest('.visual-container') != null) el = el.closest('.visual-container');
 
     if(el.classList.contains('visual-container')) {
         let viewBox = el.getAttribute('viewBox').split(' ');
 
-        let multi = 1.5;
-        if(e.deltaY > 0) for(var i = 0; i<4; i++) { viewBox[i] = viewBox[i] * multi };
-        if(e.deltaY < 0) for(var i = 0; i<4; i++) { viewBox[i] = viewBox[i] / multi };
+        let multi = 2;
+        if(e.deltaY > 0) { for(var i = 0; i<4; i++) { viewBox[i] = viewBox[i] * multi}; zoom *= multi; }
+        if(e.deltaY < 0) { for(var i = 0; i<4; i++) { viewBox[i] = viewBox[i] / multi}; zoom /= multi; }
 
+        // if(e.deltaY > 0) {
+        //     viewBox[0] *= 1+(multi * (1 - (e.clientX-rect.left)/rect.width));
+        //     viewBox[1] *= 1+(multi * (1 - (e.clientY-rect.top)/rect.height));
+        //     viewBox[2] *= 1+(multi * ((e.clientX-rect.left)/rect.width));
+        //     viewBox[3] *= 1+(multi * ((e.clientY-rect.top)/rect.height));
+        // }
+        // if(e.deltaY < 0) {
+        //     viewBox[0] /= 1+(multi * (e.clientX-rect.left)/rect.width);
+        //     viewBox[1] /= 1+(multi * (e.clientY-rect.top)/rect.height);
+        //     viewBox[2] /= 1+(multi * (1 - (e.clientX-rect.left)/rect.width));
+        //     viewBox[3] /= 1+(multi * (1 - (e.clientY-rect.top)/rect.height));
+        // }
+        
         el.setAttribute('viewBox', `${viewBox[0]} ${viewBox[1]} ${viewBox[2]} ${viewBox[3]}`)
     }
-}
+});
+
+visualizer.querySelector('.visual-container').addEventListener('mousedown', (e) => {
+    let el = e.target;
+    if(el.closest('.node') != null) el = el.closest('.node');
+
+    if(el.classList.contains('node')) {
+        window.addEventListener('mousemove', mousemove);
+        window.addEventListener('mouseup', mouseup);
+
+        let prevX = e.clientX, prevY = e.clientY;
+
+        function mousemove(e) {
+            let transform = el.getAttribute('transform');
+            let translate = transform.substring(10, transform.length-1).split(',');
+
+            translate[0] = Number(translate[0]) + (e.clientX-prevX)*zoom;
+            translate[1] = Number(translate[1]) + (e.clientY-prevY)*zoom;
+
+            prevX = e.clientX;
+            prevY = e.clientY;
+
+            el.setAttribute('transform', `translate(${translate[0]},${translate[1]})`);
+        }
+    }
+    else {
+        window.addEventListener('mousemove', mousemove);
+        window.addEventListener('mouseup', mouseup);
+
+        let prevX = e.clientX, prevY = e.clientY;
+
+        function mousemove(e) {
+            let viewBox = el.getAttribute('viewBox').split(' ');
+
+            viewBox[0] = Number(viewBox[0]) - (e.clientX-prevX)*zoom;
+            viewBox[1] = Number(viewBox[1]) - (e.clientY-prevY)*zoom;
+
+            prevX = e.clientX;
+            prevY = e.clientY;
+
+            el.setAttribute('viewBox', `${viewBox[0]} ${viewBox[1]} ${viewBox[2]} ${viewBox[3]}`)
+        }
+    }
+
+    function mouseup() {
+        window.removeEventListener('mousemove', mousemove);
+        window.removeEventListener('mouseup', mouseup);
+    }
+});
 
 
 /* ====================== GENERAL FUNCTIONS ====================== */

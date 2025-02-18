@@ -226,7 +226,7 @@ body {
     align-self: stretch;
 }
 .node-circle {
-    fill: none; 
+    fill: var(--dark-gray); 
     stroke: var(--text); 
     stroke-width: 1;
 }
