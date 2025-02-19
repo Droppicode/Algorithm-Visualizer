@@ -2,15 +2,12 @@
 #include <queue>
 #include <vector>
 #include <fstream>
-#include "json.hpp" // Include a JSON library like nlohmann/json
+#include "../../libs/json/json.hpp" // Include a JSON library like nlohmann/json
 
 using namespace std;
 using json = nlohmann::json;
 
-ofstream file("bfs.json");
-
-int V = 5;
-vector<vector<int>> adj(V);
+ofstream file("breadth_first_search_states.json");
 
 vector<int> to_vector(queue<int> q) {
     vector<int> v;
@@ -22,7 +19,7 @@ vector<int> to_vector(queue<int> q) {
 }
 
 // BFS from given source s
-void bfs(int s) {
+void bfs(vector<vector<int>>& adj, int s) {
     queue<int> q;
     vector<int> visited(adj.size(), 0);
     visited[s] = 2;
@@ -84,7 +81,7 @@ void bfs(int s) {
     file << state.dump() << endl;
 }
 
-void addEdge(int u, int v) {
+void addEdge(vector<vector<int>>& adj, int u, int v) {
     adj[u].push_back(v);
     adj[v].push_back(u); 
 }
@@ -92,13 +89,19 @@ void addEdge(int u, int v) {
 int main() {
     file << "[" << endl;  // Start JSON array
 
-    addEdge(0, 1);
-    addEdge(0, 2);
-    addEdge(1, 3);
-    addEdge(1, 4);
-    addEdge(2, 4);
+    // Read configuration file
+    ifstream config_file("breadth_first_search_config.json");
+    json config;
+    config_file >> config;
 
-    bfs(0);
+    int V = config["n_vertices"];
+    vector<vector<int>> adj(V);
+
+    for(const auto& edge : config["edges"]) {
+        addEdge(adj, edge["source"], edge["destination"]);
+    }
+
+    bfs(adj, config["start"]);
 
     file << "]" << endl;  // End JSON array
     file.close();

@@ -118,8 +118,12 @@ let states = [];
 
 document.querySelectorAll(".alg-name").forEach(el => { 
     el.addEventListener('click', () => {
-        parseStates(el.innerHTML);
-        fetch('./algorithms/' + el.innerHTML + '.html')
+        let alg_name;
+        if(el.innerHTML == 'Breadth-First Search') alg_name = 'breadth_first_search';
+        
+        parseStates(alg_name);
+
+        fetch(`./algorithms/${alg_name}/${alg_name}.html`)
         .then(res => res.text())
         .then(data => { 
             code.innerHTML = data; 
@@ -130,7 +134,7 @@ document.querySelectorAll(".alg-name").forEach(el => {
 });
 
 function parseStates(alg_name) {
-    fetch('./algorithms/states/' + alg_name + '_states.json')
+    fetch(`./algorithms/${alg_name}/${alg_name}_states.json`)
     .then(res => res.json())
     .then(data => {
         states.length = 0;
@@ -150,8 +154,13 @@ function parseStates(alg_name) {
         }
 
         updateStepRange();
+        generateVisualizer(alg_name);
     });
 }
+
+
+/* ====================== ALGORITHM CONTROLS ====================== */
+
 
 function updateStepRange() {
     const steps = controls.querySelector('.steps');
@@ -174,10 +183,6 @@ function updateStepRange() {
     }); 
 }
 
-
-/* ====================== ALGORITHM CONTROLS ====================== */
-
-
 function changeStep(x) {
     controls.querySelector('.progress').innerHTML = `${x}/${states.length}`;
 
@@ -188,6 +193,8 @@ function changeStep(x) {
         controls.querySelector(`.steps .step._${i}`).classList.add('active');
         console_log.querySelector(`.console-line._${i}`).style.display = "block";
     }
+
+    updateVisualizer(x);
 }
 
 let playing = false;
@@ -368,6 +375,16 @@ visualizer.addEventListener('mousedown', (e) => {
         window.removeEventListener('mouseup', mouseup);
     }
 });
+
+function generateVisualizer(alg_name) {
+    if(alg_name == 'breadth_first_search') {
+        
+    }
+}
+
+function updateVisualizer(x) {
+    console.log('updating to', x)
+}
 
 
 /* ====================== GENERAL FUNCTIONS ====================== */
