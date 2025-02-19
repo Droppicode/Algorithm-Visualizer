@@ -1,5 +1,5 @@
 # JSON Library for C++
-./algorithms/base/json.hpp
+algorithms/base/json.hpp
 
 # Executables from C++
-./algorithms/base/*.exe
+algorithms/base/*.exe
