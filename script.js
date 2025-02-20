@@ -153,8 +153,7 @@ function parseStates(alg_name) {
             console_log.appendChild(div);
         }
 
-        updateStepRange();
-        generateVisualizer(alg_name);
+        generateVisualizer(alg_name).then(() => { updateStepRange() });
     });
 }
 
@@ -261,14 +260,11 @@ document.querySelectorAll(".nav-btn").forEach(el => {
         el.classList.toggle('open');
 
         if(el.closest('.sidebar-btn') != null) {
-            console.log("sidebar");
             if(!el.classList.contains('open')) {
-                console.log("fechando");
                 sidebar.style.width = 0;
                 content.style.width = (content_width + sidebar_width) + "vw";
             }
             else {
-                console.log("abrindo", sidebar_width)
                 sidebar.style.width = sidebar_width + "vw";
                 content.style.width = (content_width - sidebar_width) + "vw";
             }   
@@ -276,14 +272,11 @@ document.querySelectorAll(".nav-btn").forEach(el => {
         }
 
         if(el.closest('.code-btn') != null) {
-            console.log("code");
             if(!el.classList.contains('open')) {
-                console.log("fechando");
                 code.style.width = 0;
                 content.style.width = (content_width + code_width) + "vw";
             }
             else {
-                console.log("abrindo", code_width)
                 code.style.width = code_width + "vw";
                 content.style.width = (content_width - code_width) + "vw";
             }   
@@ -376,10 +369,76 @@ visualizer.addEventListener('mousedown', (e) => {
     }
 });
 
+const visual_container = visualizer.querySelector('.visual-container');
+let node_template = visual_container.querySelector('.node').cloneNode(true);
+visual_container.innerHTML = "";
+
+function createNode(i, x, y) {
+    let node = node_template;
+    node.setAttribute('transform', `translate(${x},${y})`);
+    node.children[1].innerHTML = i;
+    return node.cloneNode(true);
+}
+
+function createEdge(a, b) {
+    // pegar pos do node a, pos do node b
+    // add line to line group
+}
+
 function generateVisualizer(alg_name) {
-    if(alg_name == 'breadth_first_search') {
-        
-    }
+    return new Promise((resolve, reject) => {
+        visual_container.innerHTML = "";
+
+        if(alg_name == 'breadth_first_search') {
+            fetch(`./algorithms/${alg_name}/${alg_name}_config.json`)
+            .then(res => res.json())
+            .then(data => {
+                let edges = Array.from({ length: data.n_vertices }, () => []);
+                let visited = Array.from({ length: data.n_vertices }, () => false);
+
+                data.edges.forEach(edge => {
+                    let [a, b] = [Number(edge.source), Number(edge.destination)];
+                    edges[a].push(b);
+                    edges[b].push(a);
+                });
+
+                let queue = [data.start]; visited[data.start] = true;
+                let line = [data.start], line_y = -150, dist = 125;
+
+                while(queue.length > 0) {
+                    for(let i = 0; i<line.length; i++) {
+                        let x;
+                        if(line.length % 2 == 0) {
+                            if(i < line.length/2) x = -dist/2 - (line.length/2-i-1)*dist;
+                            else x = +dist/2 + (i-line.length/2)*dist;
+                        }
+                        else x = dist*(i-Math.floor(line.length/2));
+
+                        visual_container.appendChild(createNode(line[i], x, line_y));
+                    }
+
+                    let curr = queue[0]; queue.shift();
+                    line = []; line_y += dist;
+
+                    edges[curr].forEach(ne => {
+                        if(!visited[ne]) {
+                            line.push(ne);
+                            queue.push(ne);
+                            visited[ne] = true;
+                        }
+                    });
+                }
+
+                data.edges.forEach(edge => {
+                    let [a, b] = [Number(edge.source), Number(edge.destination)];
+                    createEdge(a, b);
+                });
+                
+                resolve();
+            });
+        }
+        else resolve();
+    });
 }
 
 function updateVisualizer(x) {
