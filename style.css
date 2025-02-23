@@ -225,15 +225,19 @@ body {
     flex: 1 1;
     align-self: stretch;
 }
-.node-circle {
+.visual-container .node-circle {
     fill: var(--dark-gray); 
     stroke: var(--text); 
     stroke-width: 1;
 }
-.node-text {
+.visual-container .node-text {
     fill: var(--text);
     font-size: 12px;
     dominant-baseline: central; 
     text-anchor: middle;
     user-select: none;
+}
+.visual-container .edge {
+    stroke: var(--text);
+    stroke-width: 2;
 }

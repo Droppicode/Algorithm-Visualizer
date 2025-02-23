@@ -289,6 +289,7 @@ document.querySelectorAll(".nav-btn").forEach(el => {
 /* ====================== VISUALIZER ====================== */
 
 
+const visual_container = visualizer.querySelector('.visual-container');
 let zoom = 1;
 
 document.addEventListener('wheel', (e) => {
@@ -328,6 +329,7 @@ visualizer.addEventListener('mousedown', (e) => {
         window.addEventListener('mousemove', mousemove);
         window.addEventListener('mouseup', mouseup);
 
+        let id = el.classList[1].substring(1, el.classList[1].length);         
         let prevX = e.clientX, prevY = e.clientY;
 
         function mousemove(e) {
@@ -341,6 +343,19 @@ visualizer.addEventListener('mousedown', (e) => {
             prevY = e.clientY;
 
             el.setAttribute('transform', `translate(${translate[0]},${translate[1]})`);
+
+            // Change position of connected edges
+            visual_container.querySelectorAll('.edge').forEach(edge => {
+                let [a, b] = edge.classList[1].substring(1, edge.classList[1].length).split('-'); // source and destination nodes
+                if(a == id) {
+                    edge.setAttribute('x1', translate[0]);
+                    edge.setAttribute('y1', translate[1]);
+                }
+                if(b == id) {
+                    edge.setAttribute('x2', translate[0]);
+                    edge.setAttribute('y2', translate[1]);
+                }
+            });
         }
     }
     else {
@@ -369,20 +384,38 @@ visualizer.addEventListener('mousedown', (e) => {
     }
 });
 
-const visual_container = visualizer.querySelector('.visual-container');
 let node_template = visual_container.querySelector('.node').cloneNode(true);
+let edge_template = visual_container.querySelector('.edge').cloneNode(true);
 visual_container.innerHTML = "";
 
 function createNode(i, x, y) {
-    let node = node_template;
+    let node = node_template.cloneNode(true);
+    node.classList.add(`_${i}`);
+
     node.setAttribute('transform', `translate(${x},${y})`);
     node.children[1].innerHTML = i;
-    return node.cloneNode(true);
+
+    return node;
 }
 
 function createEdge(a, b) {
-    // pegar pos do node a, pos do node b
-    // add line to line group
+    let edge = edge_template.cloneNode(true);
+    edge.classList.add(`_${a}-${b}`);
+
+    let node_a = visual_container.querySelector(`.node._${a}`);
+    let node_b = visual_container.querySelector(`.node._${b}`);
+
+    let transform_a = node_a.getAttribute('transform');
+    let transform_b = node_b.getAttribute('transform');
+    let translate_a = node_a.getAttribute('transform').substring(10, transform_a.length-1).split(',');
+    let translate_b = node_b.getAttribute('transform').substring(10, transform_b.length-1).split(',');
+
+    edge.setAttribute('x1', `${translate_a[0]}`);
+    edge.setAttribute('y1', `${translate_a[1]}`);
+    edge.setAttribute('x2', `${translate_b[0]}`);
+    edge.setAttribute('y2', `${translate_b[1]}`);
+    
+    return edge;
 }
 
 function generateVisualizer(alg_name) {
@@ -431,7 +464,7 @@ function generateVisualizer(alg_name) {
 
                 data.edges.forEach(edge => {
                     let [a, b] = [Number(edge.source), Number(edge.destination)];
-                    createEdge(a, b);
+                    visual_container.insertBefore(createEdge(a, b), visual_container.firstChild);
                 });
                 
                 resolve();
