@@ -475,7 +475,12 @@ function generateVisualizer(alg_name) {
 }
 
 function updateVisualizer(x) {
-    console.log('updating to', x)
+    visual_container.querySelectorAll('.node').forEach(node => {
+        let id = node.classList[1].substring(1, node.classList[1].length);
+        node.classList.remove('queue'); node.classList.remove('visited');
+        if(states[x-1].visited[id] == 2) node.classList.add('visited');
+        if(states[x-1].visited[id] == 1) node.classList.add('queue');
+    });
 }
 
 

@@ -230,6 +230,12 @@ body {
     stroke: var(--text); 
     stroke-width: 1;
 }
+.visual-container .node.queue .node-circle {
+    fill: #29354c;
+}
+.visual-container .node.visited .node-circle {
+    fill: #0f1f3f;
+}
 .visual-container .node-text {
     fill: var(--text);
     font-size: 12px;
