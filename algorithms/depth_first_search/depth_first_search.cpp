@@ -1,5 +1,5 @@
 #include <iostream>
-#include <queue>
+#include <stack>
 #include <vector>
 #include <fstream>
 #include "../../libs/json/json.hpp" // Include a JSON library like nlohmann/json
@@ -7,40 +7,40 @@
 using namespace std;
 using json = nlohmann::json;
 
-ofstream file("breadth_first_search_states.json");
+ofstream file("depth_first_search_states.json");
 
-vector<int> to_vector(queue<int> q) {
+vector<int> to_vector(stack<int> q) {
     vector<int> v;
     while (!q.empty()) {
-        v.push_back(q.front());
+        v.push_back(q.top());
         q.pop();
     }
     return v;
 }
 
-// BFS from given source s
-void bfs(vector<vector<int>>& adj, int s) {
-    queue<int> q;
+// DFS from given source s
+void dfs(vector<vector<int>>& adj, int s) {
+    stack<int> q;
     vector<int> visited(adj.size(), 0);
     visited[s] = 2;
     q.push(s);
 
     json state = {
         {"current", s},
-        {"queue", {s}},
+        {"stack", {s}},
         {"visited", visited},
-        {"log", "Starting BFS from: " + to_string(s)}
+        {"log", "Starting DFS from: " + to_string(s)}
     };
     file << state.dump() << "," << endl;
 
     while (!q.empty()) {
-        int curr = q.front();
+        int curr = q.top();
         visited[curr] = 2;
         q.pop();
 
         state = {
             {"current", curr},
-            {"queue", to_vector(q)},
+            {"stack", to_vector(q)},
             {"visited", visited},
             {"log", "Current node: " + to_string(curr)}
         };
@@ -65,7 +65,7 @@ void bfs(vector<vector<int>>& adj, int s) {
 
         state = {
             {"current", curr},
-            {"queue", to_vector(q)},
+            {"stack", to_vector(q)},
             {"visited", visited},
             {"log", log}
         };
@@ -74,9 +74,9 @@ void bfs(vector<vector<int>>& adj, int s) {
 
     state = {
         {"current", -1},
-        {"queue", {}},
+        {"stack", {}},
         {"visited", visited},
-        {"log", "BFS completed"}
+        {"log", "DFS completed"}
     };
     file << state.dump() << endl;
 }
@@ -90,7 +90,7 @@ int main() {
     file << "[" << endl;  // Start JSON array
 
     // Read configuration file
-    ifstream config_file("breadth_first_search_config.json");
+    ifstream config_file("depth_first_search_config.json");
     json config;
     config_file >> config;
 
@@ -100,7 +100,7 @@ int main() {
     for(const auto& edge : config["edges"]) 
         addEdge(adj, edge["source"], edge["destination"]);
 
-    bfs(adj, config["start"]);
+    dfs(adj, config["start"]);
 
     file << "]" << endl;  // End JSON array
     file.close();

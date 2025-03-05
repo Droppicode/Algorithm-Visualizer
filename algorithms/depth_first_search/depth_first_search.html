@@ -1,13 +1,13 @@
 <pre><code class="language-cpp">#include &lt;iostream&gt;
-#include &lt;queue&gt;
+#include &lt;stack&gt;
 #include &lt;vector&gt;
 using namespace std;
 
-// BFS from given source s
-void bfs(vector&lt;vector&lt;int&gt;&gt;& adj, int s) 
+// DFS from given source s
+void dfs(vector&lt;vector&lt;int&gt;&gt;& adj, int s) 
 {
-    // Create a queue for BFS
-    queue&lt;int&gt; q;  
+    // Create a stack for BFS
+    stack&lt;int&gt; q;  
     
     // Initially mark all the vertices as not visited
     // When we push a vertex into the q, we mark it as 
@@ -15,18 +15,17 @@ void bfs(vector&lt;vector&lt;int&gt;&gt;& adj, int s)
     vector&lt;bool&gt; visited(adj.size(), false);
 
     // Mark the source node as visited and 
-    // enqueue it
+    // stack it
     visited[s] = true;
     q.push(s);
 
-    // Iterate over the queue
+    // Iterate over the stack
     while (!q.empty()) {
-        
-        // Dequeue a vertex from queue and print it
-        int curr = q.front();
+        // Pop a vertex from stack and print it
+        int curr = q.top();
         q.pop();
 
-        // Get all adjacent vertices of the dequeued 
+        // Get all adjacent vertices of the stack 
         // vertex curr If an adjacent has not been 
         // visited, mark it visited and enqueue it
         for (int x : adj[curr]) {
@@ -61,8 +60,8 @@ int main()
     addEdge(adj, 1, 4);
     addEdge(adj, 2, 4);
 
-    // Perform BFS traversal starting from vertex 0
-    bfs(adj, 0);
+    // Perform DFS traversal starting from vertex 0
+    dfs(adj, 0);
 
     return 0;
 }

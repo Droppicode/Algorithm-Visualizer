@@ -5,13 +5,12 @@ const visualizer = document.querySelector(".content .visualizer");
 const console_log = document.querySelector(".content .console-log");
 const code = document.querySelector(".code");
 const controls = document.querySelector('.controls');
-const home_code = code.innerHTML, home_console = console_log.innerHTML, home_visualizer = visualizer.innerHTML, home_controls = controls.innerHTML;
-
-let sidebar_width = 10, content_width = 60, code_width = 30;
 
 
 /* ====================== RESIZABLE ====================== */
 
+
+let sidebar_width = 10, content_width = 60, code_width = 30;
 
 document.querySelectorAll(".resizable-right").forEach(el => { el.addEventListener('mousedown', mousedownHor); });
 document.querySelectorAll(".resizable-left").forEach(el => { el.addEventListener('mousedown', mousedownHor); });
@@ -120,6 +119,7 @@ document.querySelectorAll(".alg-name").forEach(el => {
     el.addEventListener('click', () => {
         let alg_name;
         if(el.innerHTML == 'Breadth-First Search') alg_name = 'breadth_first_search';
+        if(el.innerHTML == 'Depth-First Search') alg_name = 'depth_first_search';
         
         parseStates(alg_name);
 
@@ -242,10 +242,12 @@ controls.addEventListener('click', (e) => {
 /* ====================== NAVBAR BUTTONS ====================== */
 
 
+const home_code = code.innerHTML, home_console = console_log.innerHTML, home_visualizer = visualizer.innerHTML, home_controls = controls.innerHTML;
+
 document.querySelector(".home-btn").addEventListener('click', () => { 
     code.innerHTML = home_code; 
     console_log.innerHTML = home_console;
-    visualizer.innerHTML = home_visualizer;
+    visual_container.innerHTML = ""
 
     states = [];
     playing = false;
@@ -422,7 +424,7 @@ function generateVisualizer(alg_name) {
     return new Promise((resolve, reject) => {
         visual_container.innerHTML = "";
 
-        if(alg_name == 'breadth_first_search') {
+        if(alg_name == 'breadth_first_search' || alg_name == 'depth_first_search') {
             fetch(`./algorithms/${alg_name}/${alg_name}_config.json`)
             .then(res => res.json())
             .then(data => {

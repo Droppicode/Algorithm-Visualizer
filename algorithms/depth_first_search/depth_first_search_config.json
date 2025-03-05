@@ -1,0 +1,13 @@
+{
+    "directed": false,
+    "weighted": false,
+    "n_vertices": 5,
+    "start": 0,
+    "edges": [
+        {"source": 0, "destination": 1, "weight": 1},
+        {"source": 0, "destination": 2, "weight": 1},
+        {"source": 1, "destination": 3, "weight": 1},
+        {"source": 1, "destination": 4, "weight": 1},
+        {"source": 2, "destination": 4, "weight": 1}
+    ]
+}

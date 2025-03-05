@@ -1,0 +1,13 @@
+[
+{"current":0,"log":"Starting DFS from: 0","stack":[0],"visited":[2,0,0,0,0]},
+{"current":0,"log":"Adding neighbors 1, 2","stack":[2,1],"visited":[2,1,1,0,0]},
+{"current":2,"log":"Current node: 2","stack":[1],"visited":[2,1,2,0,0]},
+{"current":2,"log":"Adding neighbors 4","stack":[4,1],"visited":[2,1,2,0,1]},
+{"current":4,"log":"Current node: 4","stack":[1],"visited":[2,1,2,0,2]},
+{"current":4,"log":"No new neighbors to add","stack":[1],"visited":[2,1,2,0,2]},
+{"current":1,"log":"Current node: 1","stack":[],"visited":[2,2,2,0,2]},
+{"current":1,"log":"Adding neighbors 3","stack":[3],"visited":[2,2,2,1,2]},
+{"current":3,"log":"Current node: 3","stack":[],"visited":[2,2,2,2,2]},
+{"current":3,"log":"No new neighbors to add","stack":[],"visited":[2,2,2,2,2]},
+{"current":-1,"log":"DFS completed","stack":null,"visited":[2,2,2,2,2]}
+]
