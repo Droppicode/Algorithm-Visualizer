@@ -159,6 +159,8 @@ body {
     border-top: 1px groove gray;
     border-left: 1px groove gray;
     border-bottom: 1px groove gray;
+
+    position: relative;
 }
 .sidebar .alg-name {
     font-size: 15px;
@@ -172,6 +174,8 @@ body {
 
     display: flex;
     flex-direction: column;
+
+    position: relative;
 }
 
 
@@ -183,6 +187,8 @@ body {
     border: 1px groove gray;
     overflow: auto;
     word-wrap: break-word;
+
+    position: relative;
 }
 
 .console-log .console-line {
@@ -202,6 +208,7 @@ body {
 
     overflow: auto;
     word-wrap: break-word;
+    position: relative;
 }
 
 .code pre {
@@ -219,6 +226,7 @@ body {
     border-right: 1px groove gray;
 
     display: flex;
+    position: relative;
 }
 
 .visual-container {
@@ -247,3 +255,23 @@ body {
     stroke: var(--text);
     stroke-width: 2;
 }
+
+
+.cursor-resize-h {
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    cursor: ns-resize;
+    opacity: 0;
+}
+.cursor-resize-v {
+    position: absolute;
+    width: 5px;
+    height: 100%;
+    cursor: ew-resize;
+    opacity: 0;
+}
+.cursor-resize-t { top: 0; }
+.cursor-resize-b { bottom: 0; }
+.cursor-resize-r { right: 0; }
+.cursor-resize-l { left: 0; }
