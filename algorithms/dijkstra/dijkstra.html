@@ -1,0 +1,55 @@
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;queue&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+// Returns shortest distances from src to all other vertices
+vector&lt;int&gt; dijkstra(int V, vector&lt;vector&lt;pair&lt;int, int&gt;&gt;&gt;& adj, int src) {
+    priority_queue&lt;vector&lt;int&gt;, vector&lt;vector&lt;int&gt;&gt;, greater&lt;vector&lt;int&gt;&gt;&gt; pq;
+
+    vector&lt;int&gt; dist(V, INT_MAX);
+
+    pq.push({ 0, src });
+    dist[src] = 0;
+
+    while (!pq.empty()) {
+        int u = pq.top()[1];
+        pq.pop();
+
+        for (auto x : adj[u]) {
+            int v = x.first;
+            int weight = x.second;
+
+            if (dist[v] &gt; dist[u] + weight) {
+                dist[v] = dist[u] + weight;
+                pq.push({ dist[v], v });
+            }
+        }
+    }
+
+    return dist;
+}
+
+void addEdge(vector&lt;vector&lt;pair&lt;int, int&gt;&gt;&gt;& adj, int u, int v, int w) {
+    adj[u].push_back({ v, w });
+    adj[v].push_back({ u, w });
+}
+
+int main() {
+    file &lt;&lt; "[" &lt;&lt; endl;  // Start JSON array
+
+    vector&lt;vector&lt;pair&lt;int, int&gt;&gt;&gt; adj(V);
+
+    addEdge(adj, 0, 1, 2);
+    addEdge(adj, 0, 2, 5);
+    addEdge(adj, 0, 3, 9);
+    addEdge(adj, 1, 4, 3);
+    addEdge(adj, 2, 5, 4);
+    addEdge(adj, 4, 6, 6);
+    addEdge(adj, 5, 6, 1);
+    
+    dijkstra(7, adj, 0);
+
+    return 0;
+}
+</code></pre>

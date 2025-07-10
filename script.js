@@ -114,16 +114,17 @@ function mousedownVer(e) {
 
 
 let states = [];
+let current_alg = ""
 
 document.querySelectorAll(".alg-name").forEach(el => { 
     el.addEventListener('click', () => {
-        let alg_name;
-        if(el.innerHTML == 'Breadth-First Search') alg_name = 'breadth_first_search';
-        if(el.innerHTML == 'Depth-First Search') alg_name = 'depth_first_search';
+        if(el.innerHTML == 'Breadth-First Search') current_alg = 'breadth_first_search';
+        if(el.innerHTML == 'Depth-First Search') current_alg = 'depth_first_search';
+        if(el.innerHTML == 'Dijkstra') current_alg = 'dijkstra';
         
-        parseStates(alg_name);
+        parseStates();
 
-        fetch(`./algorithms/${alg_name}/${alg_name}.html`)
+        fetch(`./algorithms/${current_alg}/${current_alg}.html`)
         .then(res => res.text())
         .then(data => { 
             code.innerHTML = data; 
@@ -133,8 +134,8 @@ document.querySelectorAll(".alg-name").forEach(el => {
     });
 });
 
-function parseStates(alg_name) {
-    fetch(`./algorithms/${alg_name}/${alg_name}_states.json`)
+function parseStates() {
+    fetch(`./algorithms/${current_alg}/${current_alg}_states.json`)
     .then(res => res.json())
     .then(data => {
         states.length = 0;
@@ -153,7 +154,7 @@ function parseStates(alg_name) {
             console_log.appendChild(div);
         }
 
-        generateVisualizer(alg_name).then(() => { updateStepRange() });
+        generateVisualizer().then(() => { updateStepRange() });
     });
 }
 
@@ -250,6 +251,7 @@ document.querySelector(".home-btn").addEventListener('click', () => {
     visual_container.innerHTML = ""
 
     states = [];
+    current_alg = ""
     playing = false;
     controls.innerHTML = home_controls;
 
@@ -420,12 +422,12 @@ function createEdge(a, b) {
     return edge;
 }
 
-function generateVisualizer(alg_name) {
+function generateVisualizer() {
     return new Promise((resolve, reject) => {
         visual_container.innerHTML = "";
 
-        if(alg_name == 'breadth_first_search' || alg_name == 'depth_first_search') {
-            fetch(`./algorithms/${alg_name}/${alg_name}_config.json`)
+        if(current_alg == 'breadth_first_search' || current_alg == 'depth_first_search' || current_alg == 'dijkstra') {
+            fetch(`./algorithms/${current_alg}/${current_alg}_config.json`)
             .then(res => res.json())
             .then(data => {
                 let edges = Array.from({ length: data.n_vertices }, () => []);
@@ -480,8 +482,16 @@ function updateVisualizer(x) {
     visual_container.querySelectorAll('.node').forEach(node => {
         let id = node.classList[1].substring(1, node.classList[1].length);
         node.classList.remove('queue'); node.classList.remove('visited');
-        if(states[x-1].visited[id] == 2) node.classList.add('visited');
-        if(states[x-1].visited[id] == 1) node.classList.add('queue');
+        if(current_alg == 'breadth_first_search' || current_alg == 'depth_first_search') {
+            if(states[x-1].visited[id] == 2) node.classList.add('visited');
+            if(states[x-1].visited[id] == 1) node.classList.add('queue');
+        }
+        if(current_alg == 'dijkstra') {
+            let queued = false
+            states[x-1].queue.forEach(i => { if(i == id) queued = true; });
+            if(queued) node.classList.add('queue');
+            else if(states[x-1].dist[id] != 2147483647) node.classList.add('visited');
+        }
     });
 }
 
